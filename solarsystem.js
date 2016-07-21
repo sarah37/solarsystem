@@ -1,41 +1,3 @@
-Array.prototype.subtract = function( b ) {
-    var a = this,
-        c = [];
-    if( Object.prototype.toString.call( b ) === '[object Array]' ) {
-        if( a.length !== b.length ) {
-            throw "Array lengths do not match.";
-        } else {
-            for( var i = 0; i < a.length; i++ ) {
-                c[ i ] = a[ i ] - b[ i ];
-            }
-        }
-    } else if( typeof b === 'number' ) {
-        for( var i = 0; i < a.length; i++ ) {
-            c[ i ] = a[ i ] - b;
-        }
-    }
-    return c;
-};
-
-Array.prototype.add = function( b ) {
-    var a = this,
-        c = [];
-    if( Object.prototype.toString.call( b ) === '[object Array]' ) {
-        if( a.length !== b.length ) {
-            throw "Array lengths do not match.";
-        } else {
-            for( var i = 0; i < a.length; i++ ) {
-                c[ i ] = a[ i ] + b[ i ];
-            }
-        }
-    } else if( typeof b === 'number' ) {
-        for( var i = 0; i < a.length; i++ ) {
-            c[ i ] = a[ i ] + b;
-        }
-    }
-    return c;
-};
-
 // data for planets
 var G = 39.47841760435743;
 
@@ -333,13 +295,13 @@ function tickFn(_elapsed) {
   for (var i = 0; i<planetData.length;i++)  {
     
     // new position
-    planetData[i].x = planetData[i].x.add(planetData[i].v.map(function(x) { return x * dt; }));
+    planetData[i].x = math.add((planetData[i].x), (planetData[i].v.map(function(x) { return x * dt; })));
     
     // new acceleration
     planetData[i].a = acceleration(i, planetData);
     
     // new velocity
-    planetData[i].v = planetData[i].v.add(planetData[i].a.map(function(x) { return x * dt; }));
+    planetData[i].v = math.add((planetData[i].v), (planetData[i].a.map(function(x) { return x * dt; })));
     
   }; // end for loop
 
@@ -483,11 +445,11 @@ function acceleration(i, planetData) {
       m = planetData[k].m;
       x_i = planetData[i].x;
       x_k = planetData[k].x;
-      r_ik = x_k.subtract(x_i)
+      r_ik = math.subtract(x_k, x_i)
       d_SE = math.pow(lengthVector(r_ik), 3);
       
       var ak = r_ik.map(function (x) {return x * G * m / d_SE})
-      a = a.add(ak);
+      a = math.add(a, ak);
 
       }; //end loop k
     return a;
